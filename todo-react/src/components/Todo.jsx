@@ -56,7 +56,7 @@ function Todo(props) {
           {props.name}
         </label>
         <label className="todo-label" htmlFor={props.id}>
-          {props.username}
+          Пользователь: {props.username}
         </label>
       </div>
       <div className="btn-group">

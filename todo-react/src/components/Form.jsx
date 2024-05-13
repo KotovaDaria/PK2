@@ -2,15 +2,21 @@ import { useState } from 'react';
 
 function Form(props) {
   const [name, setName] = useState('');
+  const [userId, setUserId] = useState('');
 
-  function handleChange(event) {
+  function handleNameChange(event) {
     setName(event.target.value);
+  }
+
+  function handleUserIdChange(event) {
+    setUserId(event.target.value);
   }
 
   function handleSubmit(event) {
     event.preventDefault();
-    props.addTask(name);
+    props.addTask(name, parseInt(userId)); // Передаем и ID пользователя
     setName('');
+    setUserId('');
   }
 
   return (
@@ -27,7 +33,17 @@ function Form(props) {
         name="text"
         autoComplete="off"
         value={name}
-        onChange={handleChange}
+        onChange={handleNameChange}
+        placeholder="Task Name"
+      />
+      <input
+        type="number"
+        id="user-id-input"
+        className="input input__lg"
+        name="userId"
+        value={userId}
+        onChange={handleUserIdChange}
+        placeholder="User ID"
       />
       <button type="submit" className="btn btn__primary btn__lg">
         Add

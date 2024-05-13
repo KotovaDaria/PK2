@@ -24,7 +24,7 @@ function App() {
       try {
         const [tasksResponse, usersResponse] = await Promise.all([
           axios.get('https://jsonplaceholder.typicode.com/todos'),
-          axios.get('https://jsonplaceholder.typicode.com/users')
+          axios.get('https://jsonplaceholder.typicode.com/users'),
         ]);
         setTasks(tasksResponse.data);
         setUsers(usersResponse.data);
@@ -41,8 +41,13 @@ function App() {
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error.message}</div>;
 
-  function addTask(name) {
-    const newTask = { id: `todo-${tasks.length + 1}`, name, completed: false };
+  function addTask(name, userID) {
+    const newTask = {
+      id: `todo-${tasks.length + 1}`,
+      title: name,
+      completed: false,
+      userId: userID,
+    };
     setTasks([...tasks, newTask]);
   }
 
@@ -72,7 +77,9 @@ function App() {
   }
 
   const filteredTasks = tasks.filter(FILTER_MAP[filter]);
-  const filteredTasksByUser = selectedUser ? filteredTasks.filter(task => task.userId === selectedUser) : filteredTasks;
+  const filteredTasksByUser = selectedUser
+    ? filteredTasks.filter((task) => task.userId === selectedUser)
+    : filteredTasks;
 
   const taskList = filteredTasksByUser.map((task) => {
     const user = users.find((user) => user.id === task.userId);
@@ -86,7 +93,7 @@ function App() {
           toggleTaskCompleted={toggleTaskCompleted}
           deleteTask={deleteTask}
           editTask={editTask}
-          username={user.username}
+          username={user.username + user.name}
         />
       );
     }
@@ -101,7 +108,9 @@ function App() {
     <select value={selectedUser} onChange={(e) => setSelectedUser(parseInt(e.target.value))}>
       <option value={null}>All Users</option>
       {users.map((user) => (
-        <option key={user.id} value={user.id}>{user.name}</option>
+        <option key={user.id} value={user.id}>
+          {user.name}
+        </option>
       ))}
     </select>
   );
